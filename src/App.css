@@ -1,0 +1,23 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#mainContent{
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+#leftPanel{
+  width: 30%;
+  max-height: 70vh;
+}
+
+
+#mainPanel{
+  width: 65%;
+  overflow: scroll;
+  max-height: 70vh;
+}

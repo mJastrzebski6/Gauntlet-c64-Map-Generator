@@ -1,0 +1,30 @@
+stage'e
+
+0:
+-Rozmiary mapy 
+- ważne default 33x33
+
+1:
+-stworzenie mapy
+-wybranie pozycji startowej
+-dodawanie od razu czego spawner jest
+
+
+2: 
+-Dodanie śmierci i goblinów
+
+
+3:
+-Portale który jest do którego
+
+4:
+-numer poziomu
+-ile życia
+-ile punktów
+
+5: 
+-Download
+
+
+
+
