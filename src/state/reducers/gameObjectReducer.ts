@@ -2,6 +2,7 @@ import { MapObjectInterface } from "../../Interfaces";
 import { ActionType } from "../action-types/actionTypes";
 import { Action } from "../actions/actions";
 import {createTwoDimensionalArray, lol} from "../../Helpers"
+import { blockCodes } from "../../Consts";
 
 const initialState: MapObjectInterface = {
     width:33, 
@@ -13,7 +14,8 @@ const initialState: MapObjectInterface = {
     wallsColor:"#6049ed", 
     wallsType:0,
     characterStartCoords:[-1,-1],
-    portalsCoords: []
+    portalsCoords: [],
+    passagesCoords: []
 };
 
 const reducer = (state:MapObjectInterface = initialState, action: Action) => {
@@ -38,10 +40,16 @@ const reducer = (state:MapObjectInterface = initialState, action: Action) => {
                 for(let j=0; j<state.height; j++)
                     if(newArr[j][i] !== 0 ) stateArr[j][i] = newArr[j][i]
                     else if(newArr[j][i] === -1 ) stateArr[j][i] = 0
-                    
+
+            
+            let updatedPortalsCoords = updatePortals(state.portalsCoords, stateArr);
+            let updatedPassagesCoords = updatePassages(state.passagesCoords, stateArr);
+
             return {
                 ...state,
-                array: stateArr
+                array: stateArr,
+                portalsCoords: updatedPortalsCoords,
+                passagesCoords: updatedPassagesCoords
             }
         case ActionType.UPDATE_START_HEALTH:
             return{
@@ -83,7 +91,6 @@ const reducer = (state:MapObjectInterface = initialState, action: Action) => {
             let newArr2 = structuredClone(action.value)
             let stateArr2 = structuredClone(state.portalsCoords)
 
-            console.log("porta ",newArr2, stateArr2)
 
             if(stateArr2.length === 0){
                 stateArr2 = newArr2
@@ -104,11 +111,80 @@ const reducer = (state:MapObjectInterface = initialState, action: Action) => {
                 ...state,
                 portalsCoords: stateArr2
             }
+            case ActionType.UPDATE_PASSAGE_COORDS:
+                let updatedPassageArr = structuredClone(state.passagesCoords);
+    
+                // Find the passage and update the coordinates if it exists
+                for (let i = 0; i < updatedPassageArr.length; i++) {
+                    if (updatedPassageArr[i][0] === action.value[0] && updatedPassageArr[i][1] === action.value[1]) {
+                        updatedPassageArr[i][2] = action.value[2];  // Replace the third element with the new array of coords
+                        return {
+                            ...state,
+                            passagesCoords: updatedPassageArr
+                        };
+                    }
+                }
+                return state;
         default:
             return state
     }
-}
+};
 
+const updatePortals = (currentPortals: number[][], array: number[][]) => {
+    let updatedPortals = structuredClone(currentPortals);
+  
+    // Find new portals and update them
+    for (let j = 0; j < array.length; j++) {              // height
+      for (let i = 0; i < array[j].length; i++) {          //width
+
+        if (! blockCodes.portals.includes(array[j][i])) continue
+
+        // Check if the portal already exists in portalsCoords
+        const portalExists = updatedPortals.some((portal) => portal[0] === i && portal[1] === j);
+
+        // Add new portal if it doesn't exist
+        if (!portalExists) {
+            updatedPortals.push([i, j, i, j]); // [x, y, x, y]
+        }
+        
+      }
+    }
+  
+    // Remove portals that no longer exist in the array
+    updatedPortals = updatedPortals.filter((portal) => {
+        
+      const [x, y] = portal;
+      return array[y][x] === 42; // Keep only portals that still exist in the array
+    });
+  
+    return updatedPortals;
+};
+
+
+const updatePassages = (currentPassages: [number, number, [number, number][]][], array: number[][]) => {
+    let updatedPassages = structuredClone(currentPassages);
+  
+    for (let j = 0; j < array.length; j++) {              // height
+      for (let i = 0; i < array[j].length; i++) {          //width
+
+        if (! blockCodes.passages.includes(array[j][i])) continue
+
+        const portalExists = currentPassages.some((passage) => passage[0] === i && passage[1] === j);
+
+        if (!portalExists) {
+            updatedPassages.push([i, j, []]);
+        }
+        
+      }
+    }
+  
+    updatedPassages = updatedPassages.filter((passage) => {
+      const [x, y] = passage;
+      return array[y][x] === 45;
+    });
+  
+    return updatedPassages;
+};
 
 export default reducer
 

@@ -224,7 +224,7 @@ const MapCanvas = () => {
                     context.drawImage(
                         Images.charactersPhoto,
                         (-arrayState[j][i]-79)*17,
-                        0,
+                        Variables.animationFrameIndex*17,
                         16,
                         16,
                         16*multiplier*i,
@@ -234,17 +234,17 @@ const MapCanvas = () => {
                     )
                 }
                 //portal and wall coords
-                if(blockCodes.portals.includes(arrayState[j][i]) || blockGroups.walls.includes(arrayState[j][i])){
+                if(blockCodes.portals.includes(arrayState[j][i]) || blockGroups.walls.includes(arrayState[j][i]) || blockCodes.passages.includes(arrayState[j][i])){
                     context.font = "18px Arial"
                     context.fillStyle = "purple"
-                    context.fillText(`${j},${i}`, 16*multiplier*i+18, 16*multiplier*j+18)
+                    context.fillText(`${i},${j}`, 16*multiplier*i+18, 16*multiplier*j+18)
                 }
                 //character
-                if(characterCoordsState[0]===j && characterCoordsState[1]===i){
+                if(characterCoordsState[0]=== i && characterCoordsState[1]=== j){
                     context.drawImage(
                         Images.charactersPhoto,
                         0,
-                        0,
+                        Variables.animationFrameIndex*17,
                         16,
                         16,
                         16*multiplier*i,

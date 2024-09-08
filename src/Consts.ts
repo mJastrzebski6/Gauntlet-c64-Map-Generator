@@ -23,7 +23,7 @@ export const blockCodes = {
   spawners: [70,71,72,73,74,75,76,77,78,79,80,81],
   boxes: [39,40,41],
   portals: [42,43,44],
-  purpleFog: [45,46,47]
+  passages: [45,46,47]
 };
 
 export const blockGroups = {

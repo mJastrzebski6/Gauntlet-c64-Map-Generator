@@ -8,7 +8,8 @@ export interface MapObjectInterface{
     wallsColor:string,
     characterStartCoords: number[],
     wallsType:number,
-    portalsCoords: number[][]
+    portalsCoords: number[][],
+    passagesCoords: [number, number, [number, number][]][];
 }
 
 export interface HSLInterface{

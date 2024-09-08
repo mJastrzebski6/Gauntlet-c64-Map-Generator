@@ -45,7 +45,7 @@ export default function FormPropsTextFields({what, sendToParent, min, max, defau
     <CustomNumberInput
       aria-label="Demo number input"
       placeholder="Type a number…"
-      onChange={(event, val) => sendToParent(what,val)}
+      onChange={(_, val) => sendToParent(what,val)}
       min={min}
       max={max}
       defaultValue={defaultValue}

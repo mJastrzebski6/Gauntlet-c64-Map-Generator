@@ -7,12 +7,13 @@ interface SmallCanvasInterface{
     photo: HTMLImageElement,
     sendBlockToParent: Function,
     blocks:number,
-    animated: boolean
+    animated: boolean,
+    active: boolean
 }
 
 let photo2:any
 
-export default function SmallCanvas({photo, sendBlockToParent,blocks, animated}:SmallCanvasInterface){
+export default function SmallCanvas({photo, sendBlockToParent,blocks, animated, active}:SmallCanvasInterface){
     let highlighted = [-1,-1];
     let multiplier = 5
     let bounds: DOMRect;
@@ -49,6 +50,7 @@ export default function SmallCanvas({photo, sendBlockToParent,blocks, animated}:
         });
 
         canvas.addEventListener("click", () => {
+            if(!active) return
             if(highlighted[1] === -1 || highlighted[0] === -1) return
             let itemNum = colsAndRows.cols*highlighted[1]+highlighted[0]
             if(itemNum+1>blocks) return
@@ -68,7 +70,7 @@ export default function SmallCanvas({photo, sendBlockToParent,blocks, animated}:
 
         return () => window.cancelAnimationFrame(animationId)
 
-    },[])
+    },[active])
 
     function calculateRowsAndCols(canvas:HTMLCanvasElement, context: CanvasRenderingContext2D){
         const quotientCols = Math.floor(bounds.width/80);
@@ -136,7 +138,7 @@ export default function SmallCanvas({photo, sendBlockToParent,blocks, animated}:
         for(let j=0; j<colsAndRows.rows; j++){
             for(let i=0; i<colsAndRows.cols; i++){
                 if(item>blocks-1) return
-                if (highlighted[0] == i && highlighted[1] == j) {
+                if (highlighted[0] == i && highlighted[1] == j && active) {
                     context.filter =  "brightness(0.5)";
                     context.drawImage(
                         photo2,

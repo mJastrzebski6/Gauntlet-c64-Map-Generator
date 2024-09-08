@@ -55,6 +55,10 @@ interface UpdatePortalsCoords {
   type: ActionType.UPDATE_PORTALS_COORDS;
   value: number[][]
 }
+interface UpdatePassageCoords {
+  type: ActionType.UPDATE_PASSAGE_COORDS;
+  value: [number, number, [number, number][]]
+}
 
 export type Action =
   | UpdateWidthAction
@@ -67,4 +71,5 @@ export type Action =
   | UpdateWallsTypeAction
   | UpdateCharacterCoordsAction
   | UpdateWholeState
-  | UpdatePortalsCoords;
+  | UpdatePortalsCoords
+  | UpdatePassageCoords;

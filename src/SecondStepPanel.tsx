@@ -21,11 +21,16 @@ import { useAppSelector, useAppDispatch } from './state/hooks'
 import SpawnerDialog from './SpawnerDialog';
 import { SpawnerMonsters } from './Interfaces';
 import GradeIcon from '@mui/icons-material/Grade';
+import { Button, Grid, Switch } from '@mui/material';
+import { blockCodes } from './Consts';
+
 
 export default function SecondStepPanel() {
   const [tabValue, setTabValue] = React.useState('1')
   const [wallsPhoto, setWallsPhoto] = React.useState<HTMLImageElement>(new Image())
   const [open, setOpen] = React.useState(false);
+  const arrayState = useAppSelector((state:State)=>state.gameObject.array)
+  const [smartWallsOn, setSmartWallsOn] = React.useState<boolean>(true)
 
   const dispatch = useAppDispatch()
   const wallsColorState = useAppSelector((state:State)=>state.gameObject.wallsColor)
@@ -36,9 +41,57 @@ export default function SecondStepPanel() {
   const [spawnerData, setSpawnerData] = React.useState(Number)
   const [selectedFieldsCopy, setSelectedFieldsCopy] = React.useState<number[][]>([]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setTabValue(newValue);
   };
+
+  function putWall(destructible: boolean){
+    let arrayCopy = createTwoDimensionalArray(widthState,heightState)
+
+    for(let i=0; i<widthState; i++){
+      for(let j=0; j<heightState; j++){
+        if(Variables.selectedFields[j][i] === 1){
+          if(destructible) arrayCopy[j][i] = 1
+          else arrayCopy[j][i] = 4
+          Variables.selectedFields[j][i]=0
+        }
+      }
+    }
+
+    dispatch(updateArray(arrayCopy))
+  }
+
+  //monster i know
+  useEffect(()=>{
+    if (!smartWallsOn) return;
+    let arrayCopy = createTwoDimensionalArray(widthState,heightState)
+    let somethingChanged = false
+
+    for(let i=0; i<widthState; i++){
+      for(let j=0; j<heightState; j++){
+        if (!blockCodes.indestructibleWalls.includes(arrayState[j][i])) continue
+
+             if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 4) {arrayCopy[j][i] = 4; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 5) {arrayCopy[j][i] = 5; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 6) {arrayCopy[j][i] = 6; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 7) {arrayCopy[j][i] = 7; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 8) {arrayCopy[j][i] = 8; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 9) {arrayCopy[j][i] = 9; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 10) {arrayCopy[j][i] = 10; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 11) {arrayCopy[j][i] = 11; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 12) {arrayCopy[j][i] = 12; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 13) {arrayCopy[j][i] = 13; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 14) {arrayCopy[j][i] = 14; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 15) {arrayCopy[j][i] = 15; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 16) {arrayCopy[j][i] = 16; somethingChanged=true}  
+        else if(!blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 17) {arrayCopy[j][i] = 17; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) && !blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 18) {arrayCopy[j][i] = 18; somethingChanged=true}  
+        else if( blockCodes.indestructibleWalls.includes(arrayState?.[j-1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j+1]?.[i]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i-1]) &&  blockCodes.indestructibleWalls.includes(arrayState?.[j]?.[i+1]) && arrayState[j][i] !== 19) {arrayCopy[j][i] = 19; somethingChanged=true}  
+      }
+    }
+
+    if(somethingChanged) dispatch(updateArray(arrayCopy))
+  }, [arrayState])
 
   function sendBlockToParent(photo: string, numOfBlock: number){
     if(photo === "items"){
@@ -79,7 +132,7 @@ export default function SecondStepPanel() {
           }
           else if(photo === "creatures"){                
             if(numOfBlock === 0){ //player
-              dispatch(updateCharacterCoords([j,i]));
+              dispatch(updateCharacterCoords([i,j]));
               Variables.selectedFields[j][i]=0
               arrayCopy[j][i] = -1 //cleaning place?
               exitLoop = true
@@ -141,6 +194,10 @@ export default function SecondStepPanel() {
     setSelectedFieldsCopy([])
   };
 
+  let handleSwitchChange = () => {
+    setSmartWallsOn(!smartWallsOn)
+  }
+
   useEffect(()=>{     
       setWallsPhoto(Images.wallsPhoto)
   },[wallsTypeState,wallsColorState])
@@ -161,20 +218,37 @@ export default function SecondStepPanel() {
               <ColorsRadioGroup/>
               <WallsTypeRadioGroup/>
             </div>
-            <SmallCanvas photo={wallsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("walls", num )} animated={false}/>
+            <SmallCanvas photo={wallsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("walls", num )} animated={false} active={!smartWallsOn}/>
+            <Grid component="label" container alignItems="center" spacing={1} justifyContent={"center"} sx={{py:1}}>
+              <Grid item>Manual walls</Grid>
+              <Grid item>
+                <Switch
+                  checked={smartWallsOn}
+                  onChange={handleSwitchChange}
+                />
+              </Grid>
+              <Grid item>Smart walls</Grid>
+            </Grid>
+            {
+            smartWallsOn && <>
+              <Button variant='contained'onClick={()=>putWall(true)}>Put destructible</Button>
+              <Button variant='contained'onClick={()=>putWall(false)} sx={{ml: 1}}>Put indestructible</Button>
+            </>
+            }
+            
           </TabPanel>
           <TabPanel value="2">
-            <SmallCanvas photo={Images.itemsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("items", num )} animated={false}/>
+            <SmallCanvas photo={Images.itemsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("items", num )} animated={false} active={true}/>
             <SpawnerDialog
               open={open}
               onClose={handleClose}
             />
           </TabPanel>
           <TabPanel value="3">
-            <SmallCanvas photo={Images.specialItemsPhoto} blocks={3} sendBlockToParent={(num:number)=>sendBlockToParent("special", num )} animated={true}/>
+            <SmallCanvas photo={Images.specialItemsPhoto} blocks={3} sendBlockToParent={(num:number)=>sendBlockToParent("special", num )} animated={true} active={true}/>
           </TabPanel>
           <TabPanel value="4">
-            <SmallCanvas photo={Images.charactersPhoto} blocks={7} sendBlockToParent={(num:number)=>sendBlockToParent("creatures", num )} animated={false}/>
+            <SmallCanvas photo={Images.charactersPhoto} blocks={7} sendBlockToParent={(num:number)=>sendBlockToParent("creatures", num )} animated={true} active={true}/>
           </TabPanel>
       </TabContext>
     </Box>

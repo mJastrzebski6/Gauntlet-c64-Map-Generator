@@ -9,5 +9,6 @@ export enum ActionType {
     UPDATE_WALLS_TYPE = "update_walls_type",
     UPDATE_CHARACTER_COORDS = "update_character_coords",
     UPDATE_WHOLE_STATE = "update_whole_state",
-    UPDATE_PORTALS_COORDS = "update_portals_coords"
+    UPDATE_PORTALS_COORDS = "update_portals_coords",
+    UPDATE_PASSAGE_COORDS = "update_passage_coords",
 }

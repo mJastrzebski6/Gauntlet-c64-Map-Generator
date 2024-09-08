@@ -10,6 +10,7 @@ import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStati
 import SettingsIcon from '@mui/icons-material/Settings';
 import DownloadIcon from '@mui/icons-material/Download';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { StepIconProps } from '@mui/material/StepIcon';
@@ -17,7 +18,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from './state/hooks'
+import { useAppSelector } from './state/hooks'
 import { State } from './state/reducers';
 import { blockCodes } from './Consts';
 
@@ -73,12 +74,13 @@ function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className } = props;
 
   const icons: { [index: string]: React.ReactElement } = {
-    1:  <FileUploadIcon/>,
+    1: <FileUploadIcon/>,
     2: <CropSquareIcon />,
     3: <MapIcon />,
-    4: <TransferWithinAStationIcon />,
-    5: <SettingsIcon />,
-    6: <DownloadIcon />,
+    4: <AutoAwesomeIcon/>,
+    5: <TransferWithinAStationIcon />,
+    6: <SettingsIcon />,
+    7:<DownloadIcon />,
   };
 
   return (
@@ -88,7 +90,7 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = ["Import Map",'Set map size', 'Create a map', "Connect portals", "Set properties", "Download Map"];
+const steps = ["Import Map",'Set map size', 'Create a map', "Set secret passages" ,"Connect portals", "Set properties", "Download Map"];
 
 
 interface StepperProps {

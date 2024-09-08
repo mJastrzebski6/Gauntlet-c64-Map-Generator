@@ -11,6 +11,7 @@ import ZeroStepPanel from './ZeroStepPanel'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import FourthStepPanel from './FourthStepPanel'
+import ThirdStepPanel from './ThirdStepPanel'
 
 const darkTheme = createTheme({
   palette: {
@@ -52,12 +53,13 @@ function App() {
       {activeStep == 1 && <FirstStepPanel/>}
 
       {/* map */}
-      {activeStep > 1 && activeStep < 4 && 
+      {activeStep > 1 && activeStep < 5 && 
 
         <div id='mainContent'>
           <div id="leftPanel">
             {activeStep == 2 && <SecondStepPanel/>}
-            {activeStep == 3 && <FourthStepPanel/>}
+            {activeStep == 3 && <ThirdStepPanel/>}
+            {activeStep == 4 && <FourthStepPanel/>}
           </div>
           <div id="mainPanel" >
             <MapCanvas/>
@@ -66,10 +68,10 @@ function App() {
       }
 
       {/* properties */}
-      {activeStep == 4 && <FifthStepPanel/>}
+      {activeStep == 5 && <FifthStepPanel/>}
 
       {/* download */}
-      {activeStep == 5 && <SixthStepPanel/>} 
+      {activeStep == 6 && <SixthStepPanel/>} 
 
       </ThemeProvider>
     </>

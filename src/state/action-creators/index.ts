@@ -93,3 +93,12 @@ export const updatePortalsCoords = (value: number[][]) => {
         })
     }
 }
+
+export const updatePassagesCoords = (value: [number, number, [number, number][]]) => {
+    return (dispatch: Dispatch<Action>) => {
+        dispatch({
+            type: ActionType.UPDATE_PASSAGE_COORDS,
+            value:value
+        })
+    }
+}
