@@ -38,8 +38,9 @@ const reducer = (state:MapObjectInterface = initialState, action: Action) => {
 
             for(let i=0; i<state.width; i++)
                 for(let j=0; j<state.height; j++)
-                    if(newArr[j][i] !== 0 ) stateArr[j][i] = newArr[j][i]
-                    else if(newArr[j][i] === -1 ) stateArr[j][i] = 0
+                    if(newArr[j][i] === -1 ) stateArr[j][i] = 0
+                    else if(newArr[j][i] !== 0 ) stateArr[j][i] = newArr[j][i]
+                    
 
             
             let updatedPortalsCoords = updatePortals(state.portalsCoords, stateArr);
@@ -51,6 +52,7 @@ const reducer = (state:MapObjectInterface = initialState, action: Action) => {
                 portalsCoords: updatedPortalsCoords,
                 passagesCoords: updatedPassagesCoords
             }
+
         case ActionType.UPDATE_START_HEALTH:
             return{
                 ...state,

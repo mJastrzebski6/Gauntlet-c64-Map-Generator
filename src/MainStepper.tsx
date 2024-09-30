@@ -103,6 +103,8 @@ interface StepperProps {
 export default function CustomizedSteppers({getSteps, activeStepProp}: StepperProps) {
   const [activeStep, setActiveStep] = React.useState(0);
   const characterStartCoords = useAppSelector((state:State)=>state.gameObject.characterStartCoords)
+  const passages = useAppSelector((state:State)=>state.gameObject.passagesCoords)
+  const portals = useAppSelector((state:State)=>state.gameObject.portalsCoords)
   const arrayState = useAppSelector((state:State)=>state.gameObject.array)
   const mapWidthState = useAppSelector((state:State)=>state.gameObject.width)
   const mapHeightState = useAppSelector((state:State)=>state.gameObject.height)
@@ -122,12 +124,40 @@ export default function CustomizedSteppers({getSteps, activeStepProp}: StepperPr
         window.alert("There is no exit on the map")
         return
       }
+
+      if (passages.length === 0 && portals.length === 0 ){
+        setActiveStep((prevActiveStep) => prevActiveStep + 3);
+        return;
+      }
+      if ( passages.length === 0 ){
+        setActiveStep((prevActiveStep) => prevActiveStep + 2);
+        return
+      }
+    }
+    if ( activeStep === 3 && portals.length === 0 ){
+      setActiveStep((prevActiveStep) => prevActiveStep + 2);
+      return
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
     if(activeStep === 2) return
+    if ( activeStep === 5 && passages.length === 0 && portals.length === 0 ){
+      setActiveStep((prevActiveStep) => prevActiveStep - 3);
+      return;
+    }
+
+    if ( activeStep === 5 && portals.length === 0 ){
+      setActiveStep((prevActiveStep) => prevActiveStep - 2);
+      return;
+    }
+
+    if ( activeStep === 4 && passages.length === 0 ){
+      setActiveStep((prevActiveStep) => prevActiveStep - 2);
+      return;
+    }
+
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -148,6 +178,7 @@ export default function CustomizedSteppers({getSteps, activeStepProp}: StepperPr
     }
     return exists
   }
+
 
   return (
     <Box sx={{ width: '100%' }}>

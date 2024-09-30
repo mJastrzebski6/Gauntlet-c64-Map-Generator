@@ -12,6 +12,6 @@ export default function SixthStepPanel(){
         FileHandler.saveToFile(gameObjectState)
     }
     return(
-        <Button variant="contained" color="success" startIcon={<DownloadIcon/>} onClick={() =>{createFile()}}>Download</Button>
+        <Button sx={{mt:2}} variant="contained" color="success" startIcon={<DownloadIcon/>} onClick={() =>{createFile()}}>Download</Button>
     )
 }

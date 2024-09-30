@@ -218,7 +218,7 @@ export default function SecondStepPanel() {
               <ColorsRadioGroup/>
               <WallsTypeRadioGroup/>
             </div>
-            <SmallCanvas photo={wallsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("walls", num )} animated={false} active={!smartWallsOn}/>
+
             <Grid component="label" container alignItems="center" spacing={1} justifyContent={"center"} sx={{py:1}}>
               <Grid item>Manual walls</Grid>
               <Grid item>
@@ -229,13 +229,62 @@ export default function SecondStepPanel() {
               </Grid>
               <Grid item>Smart walls</Grid>
             </Grid>
-            {
-            smartWallsOn && <>
-              <Button variant='contained'onClick={()=>putWall(true)}>Put destructible</Button>
-              <Button variant='contained'onClick={()=>putWall(false)} sx={{ml: 1}}>Put indestructible</Button>
-            </>
+
+            {smartWallsOn ? (
+            <Grid
+              container
+              spacing={1}
+              direction={{
+                xl: "row",
+                lg:"column",
+                md:"column",
+                sm:"column",
+                xs:"column",
+              }} 
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                width: '100%',
+                '& > .MuiGrid-item': { 
+                  width: '100%',
+                  maxWidth: '150px', 
+                  display: 'flex',
+                  justifyContent: 'center',
+                  mb: 1,
+                },
+              }}
+            >
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => putWall(true)}
+                  sx={{
+                    fontSize: { xs: '0.4rem', sm: '0.8rem', md: '0.875rem' },
+                    padding: { xs: '6px 10px', sm: '8px 12px' },
+                    width: '100%',
+                  }}
+                >
+                  PUT DESTRUCTIBLE
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => putWall(false)}
+                  sx={{
+                    fontSize: { xs: '0.4rem', sm: '0.8rem', md: '0.875rem' },
+                    padding: { xs: '6px 10px', sm: '8px 12px' },
+                    width: '100%',
+                  }}
+                >
+                  PUT INDESTRUCTIBLE
+                </Button>
+              </Grid>
+            </Grid>
+          ) :
+              <SmallCanvas photo={wallsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("walls", num )} animated={false} active={!smartWallsOn}/>
             }
-            
           </TabPanel>
           <TabPanel value="2">
             <SmallCanvas photo={Images.itemsPhoto} blocks={19} sendBlockToParent={(num:number)=>sendBlockToParent("items", num )} animated={false} active={true}/>
